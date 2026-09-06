@@ -7,10 +7,10 @@
 // ---- Program management ----
 
 EMBSTRIN_Program *EMBSTRIN_INFRA_API_create_program(uint8_t *instructions,
-                                                    uint32_t buf_size,
-                                                    uint32_t instruction_count,
-                                                    uint32_t SRAM_req,
-                                                    uint32_t flash_req)
+                                                    instruction_count_t buf_size,
+                                                    instruction_count_t instruction_count,
+                                                    mem_size_t SRAM_req,
+                                                    mem_size_t flash_req)
 {
     EMBSTRIN_Program *program = (EMBSTRIN_Program *)malloc(sizeof(EMBSTRIN_Program));
     if (program == NULL)
@@ -42,7 +42,7 @@ void EMBSTRIN_INFRA_API_destroy_program(EMBSTRIN_Program *program)
 
 /*------------ Queue Manangement --------------*/
 
-EMBSTRIN_ProgQueue *EMBSTRIN_INFRA_API_create_queue(uint32_t capacity)
+EMBSTRIN_ProgQueue *EMBSTRIN_INFRA_API_create_queue(queue_size_t capacity)
 {
     EMBSTRIN_ProgQueue *queue = (EMBSTRIN_ProgQueue *)malloc(sizeof(EMBSTRIN_ProgQueue));
     if (!queue)
@@ -96,7 +96,7 @@ EMBSTRIN_Program *EMBSTRIN_INFRA_API_pop_program_from_queue(EMBSTRIN_ProgQueue *
 
     EMBSTRIN_Program *program = queue->programs[0];
 
-    for (uint32_t i = 0; i < queue->count - 1; i++)
+    for (queue_size_t i = 0; i < queue->count - 1; i++)
     {
         queue->programs[i] = queue->programs[i + 1];
     }
@@ -143,15 +143,15 @@ uint32_t EMBSTRIN_INFRA_API_queue_count(EMBSTRIN_ProgQueue *queue)
 // ---- Task management ----
 EMBSTRIN_Task *EMBSTRIN_INFRA_API_create_task(EMBSTRIN_Program *program,
                                               uint32_t priority,
-                                              uint32_t parent_id,
-                                              uint32_t ttl)
+                                              task_id_t parent_id,
+                                              ttl_t ttl)
 {
     EMBSTRIN_Task *task = (EMBSTRIN_Task *)malloc(sizeof(EMBSTRIN_Task));
     if (!task)
     {
         return NULL;
     }
-    static uint32_t next_task_id = 1;
+    static task_id_t next_task_id = 1;
     task->task_id = next_task_id++;
     task->program = program;
     task->priority = priority;
@@ -178,7 +178,7 @@ EMBSTRIN_Task *EMBSTRIN_INFRA_API_get_task(EMBSTRIN_Device *device,
     return NULL;
 }
 
-int32_t EMBSTRIN_INFRA_API_update_task_state(EMBSTRIN_Task *task, int32_t new_state)
+int32_t EMBSTRIN_INFRA_API_update_task_state(EMBSTRIN_Task *task, task_state_t new_state)
 {
     if (!task)
         return EMBSTRIN_ERROR;
@@ -201,9 +201,9 @@ void EMBSTRIN_INFRA_API_destroy_task(EMBSTRIN_Task *task)
 
 // ---- Device management ----
 EMBSTRIN_Device *EMBSTRIN_INFRA_API_register_device(EMBSTRIN_Host *host,
-                                                    uint32_t device_id,
-                                                    uint32_t device_type,
-                                                    uint32_t task_queue_max)
+                                                    device_id_t device_id,
+                                                    device_type_t device_type,
+                                                    queue_size_t task_queue_max)
 {
     if (host->device_count >= host->device_capacity)
     {
@@ -226,7 +226,7 @@ EMBSTRIN_Device *EMBSTRIN_INFRA_API_register_device(EMBSTRIN_Host *host,
 }
 
 int32_t EMBSTRIN_INFRA_API_remove_device(EMBSTRIN_Host *host,
-                                         uint32_t device_id)
+                                         device_id_t device_id)
 {
     if (host == NULL)
     {
@@ -255,7 +255,7 @@ int32_t EMBSTRIN_INFRA_API_remove_device(EMBSTRIN_Host *host,
 }
 
 EMBSTRIN_Device *EMBSTRIN_INFRA_API_get_device(EMBSTRIN_Host *host,
-                                               uint32_t device_id)
+                                               device_id_t device_id)
 {
     if (host == NULL)
     {
@@ -314,7 +314,7 @@ int32_t EMBSTRIN_INFRA_API_add_neighbour(EMBSTRIN_Device *device,
 }
 
 int32_t EMBSTRIN_INFRA_API_remove_neighbour(EMBSTRIN_Device *device,
-                                            uint32_t neighbour_id)
+                                            device_id_t neighbour_id)
 {
     if (!device)
     {
@@ -339,8 +339,8 @@ int32_t EMBSTRIN_INFRA_API_remove_neighbour(EMBSTRIN_Device *device,
 }
 
 // ---- Host management ----
-EMBSTRIN_Host *EMBSTRIN_INFRA_API_create_host(uint32_t device_capacity,
-                                              uint32_t queue_capacity)
+EMBSTRIN_Host *EMBSTRIN_INFRA_API_create_host(queue_size_t device_capacity,
+                                              queue_size_t queue_capacity)
 {
     EMBSTRIN_Host *host = (EMBSTRIN_Host *)malloc(sizeof(EMBSTRIN_Host));
     if (!host)
