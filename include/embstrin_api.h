@@ -1,3 +1,6 @@
+#ifndef EMBSTRIN_API_H
+#define EMBSTRIN_API_H
+
 #include <stdint.h>
 #include <stdbool.h>
 #include "embstrin_types.h"   
@@ -68,3 +71,6 @@ EMBSTRIN_Host* EMBSTRIN_INFRA_API_create_host(uint32_t device_capacity,
                                                uint32_t queue_capacity);
 
 void EMBSTRIN_INFRA_API_destroy_host(EMBSTRIN_Host* host);
+
+
+#endif
