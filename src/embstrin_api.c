@@ -209,6 +209,15 @@ EMBSTRIN_Device *EMBSTRIN_INFRA_API_register_device(EMBSTRIN_Host *host,
     {
         return NULL;
     }
+
+    for (queue_size_t i = 0; i < host->device_count; i++)
+    {
+        if (host->devices[i]->device_id == device_id)
+        {
+            return NULL;
+        }
+    }
+
     EMBSTRIN_Device *device = (EMBSTRIN_Device *)malloc(sizeof(EMBSTRIN_Device));
     if (!device)
         return NULL;
