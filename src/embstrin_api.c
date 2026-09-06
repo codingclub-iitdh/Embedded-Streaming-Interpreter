@@ -162,7 +162,7 @@ EMBSTRIN_Task *EMBSTRIN_INFRA_API_create_task(EMBSTRIN_Program *program,
 }
 
 EMBSTRIN_Task *EMBSTRIN_INFRA_API_get_task(EMBSTRIN_Device *device,
-                                           uint32_t task_id)
+                                           task_id_t task_id)
 {
     if (device == NULL || device->task_queue == NULL)
     {
