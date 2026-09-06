@@ -1,3 +1,7 @@
+#ifndef EMBSTRIN_TYPES_H
+#define EMBSTRIN_TYPES_H
+
+
 #include <stdint.h>
 #include <stdbool.h>
 
@@ -10,30 +14,44 @@
 #define EMBSTRIN_RUNNING 4
 #define EMBSTRIN_COMPLETED 5
 
+
+
+typedef uint32_t program_id_t;
+typedef uint32_t instruction_count_t;
+typedef uint32_t task_id_t;
+typedef int32_t task_state_t;
+typedef uint32_t device_id_t;
+typedef uint32_t device_type_t;
+typedef uint32_t queue_size_t;
+typedef uint32_t mem_size_t;        //this includes all types of memory: SRAM, flash, etc 
+typedef uint32_t ttl_t;
+
+
+
 typedef struct
 {
-    uint32_t program_id;
+    program_id_t program_id;
     uint8_t *instructions;
-    uint32_t instruction_count;
-    uint32_t instruction_buf_size;
-    uint32_t SRAM_req;
-    uint32_t flash_req;
+    instruction_count_t instruction_count;
+    instruction_count_t instruction_buf_size;
+    mem_size_t SRAM_req;
+    mem_size_t flash_req;
 } EMBSTRIN_Program;
 
 typedef struct
 {
     EMBSTRIN_Program **programs;
-    uint32_t count;
-    uint32_t queue_size;
+    queue_size_t count;
+    queue_size_t queue_size;
 } EMBSTRIN_ProgQueue;
 
 typedef struct
 {
-    uint32_t task_id;
-    uint32_t parent_id;
+    task_id_t task_id;
+    task_id_t parent_id;
     uint32_t priority;
-    uint32_t ttl;
-    int32_t task_state;
+    ttl_t ttl;
+    task_state_t task_state;
     EMBSTRIN_Program *program;
 } EMBSTRIN_Task; 
 
@@ -41,21 +59,23 @@ typedef struct EMBSTRIN_Device EMBSTRIN_Device;
 
 struct EMBSTRIN_Device
 {
-    uint32_t device_id;
-    uint32_t device_type;
+    device_id_t device_id;
+    device_type_t device_type;
     EMBSTRIN_Device **neighbours;
     uint32_t neighbours_count;
     bool device_state; // true if free, false if busy
     EMBSTRIN_Task *curr_task;
     EMBSTRIN_Task **task_queue;
-    uint32_t task_queue_len;
-    uint32_t task_queue_max;
+    queue_size_t task_queue_len;
+    queue_size_t task_queue_max;
 };
 
 typedef struct
 {
     EMBSTRIN_Device **devices;
-    uint32_t device_count;
-    uint32_t device_capacity;
+    queue_size_t device_count;
+    queue_size_t device_capacity;
     EMBSTRIN_ProgQueue pending_queue;
 } EMBSTRIN_Host;
+
+#endif 
