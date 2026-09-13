@@ -21,10 +21,18 @@ typedef uint32_t instruction_count_t;
 typedef uint32_t task_id_t;
 typedef int32_t task_state_t;
 typedef uint32_t device_id_t;
-typedef uint32_t device_type_t;
 typedef uint32_t queue_size_t;
 typedef uint32_t mem_size_t;        //this includes all types of memory: SRAM, flash, etc 
 typedef uint32_t ttl_t;
+
+
+typedef enum
+{
+    EMBSTRIN_DEVICE_UNKNOWN = 0,
+    EMBSTRIN_DEVICE_ESP32C6,
+    EMBSTRIN_DEVICE_MAX78000,
+    EMBSTRIN_DEVICE_HOST
+} device_type_t;
 
 
 
@@ -78,4 +86,4 @@ typedef struct
     EMBSTRIN_ProgQueue pending_queue;
 } EMBSTRIN_Host;
 
-#endif 
+#endif
